@@ -196,7 +196,14 @@
                 var params = {
                     url: options.url,
                     type: form.attr('method').toUpperCase(),
-                    dataType: "json"
+                    dataType: "json",
+                    success: function (data) {
+                        process_response_data(data, options);
+                    },
+                    error: function () {
+                        enable_modal_buttons();
+                        modal_body.text(global_options.modal_load_error);
+                    }
                 };
 
                 var data;
@@ -210,12 +217,7 @@
                 }
                 params['data'] = data;
                 disable_modal_buttons();
-                $.ajax(params).success(function (data) {
-                    process_response_data(data, options);
-                }).error(function () {
-                    enable_modal_buttons();
-                    modal_body.text(global_options.modal_load_error);
-                });
+                $.ajax(params);
                 return false;
             }
 
